@@ -14,6 +14,10 @@
 
 ## 🛠 Как запустить
 
+```git
+https://github.com/Markovskoy/Neovim-setup.git
+```
+
 ```bash
 bash setup.sh
 ```
