@@ -1,4 +1,7 @@
--- Установка пути к Lazy.nvim
+vim.g.mapleader = " "
+local keymap = vim.keymap.set
+
+-- Установка Lazy.nvim
 vim.opt.rtp:prepend("~/.config/nvim/lazy/lazy.nvim")
 
 require("lazy").setup({
@@ -12,25 +15,51 @@ require("lazy").setup({
   "lewis6991/gitsigns.nvim",
 
   -- Файловый менеджер
-  "nvim-tree/nvim-tree.lua",
+  { "nvim-tree/nvim-tree.lua", dependencies = { "nvim-tree/nvim-web-devicons" } },
 
   -- Статусбар
   "nvim-lualine/lualine.nvim",
 
   -- Поиск
-  "nvim-telescope/telescope.nvim",
   "nvim-lua/plenary.nvim",
+  "nvim-telescope/telescope.nvim",
 
-  -- 🆕 Neogit — Git GUI
+  -- LazyGit Launcher
   {
-    "NeogitOrg/neogit",
+    "kdheepak/lazygit.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("neogit").setup()
-    end,
   },
-})
 
+  {
+    "goolord/alpha-nvim",
+  event = "VimEnter",
+  config = function()
+    local alpha = require("alpha")
+    local dashboard = require("alpha.themes.dashboard")
+      
+    dashboard.section.header.val = {
+        [[███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗]],
+        [[████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║]],
+        [[██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║]],
+        [[██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║]],
+        [[██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║]],
+        [[╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+      }
+      dashboard.section.buttons.val = {
+        dashboard.button("e", "  New File", ":ene <BAR> startinsert<CR>"),
+        dashboard.button("SPC ee", "  Toggle file explorer", ":NvimTreeToggle<CR>"),
+        dashboard.button("SPC ff", "  Find File", ":Telescope find_files<CR>"),
+        dashboard.button("SPC gg", "  LazyGit", ":LazyGit<CR>"),
+        dashboard.button("q", "  Quit NVIM", ":qa<CR>"),
+      }
+    -- Send config to alpha
+    alpha.setup(dashboard.opts)
+
+    -- Disable folding on alpha buffer
+    vim.cmd([[autocmd FileType alpha setlocal nofoldenable]])
+  end,
+},
+})
 
 -- Общие настройки
 vim.o.number = true
@@ -41,13 +70,13 @@ vim.o.expandtab = true
 vim.o.shiftwidth = 2
 vim.o.tabstop = 2
 
--- Тема
+-- Цветовая тема
 vim.cmd("colorscheme tokyonight")
 
 -- Статусбар
 require("lualine").setup()
 
--- Git
+-- Git-интеграция
 require("gitsigns").setup()
 
 -- Файловый менеджер
@@ -61,13 +90,36 @@ require("nvim-treesitter.configs").setup {
   ensure_installed = { "bash", "yaml", "json", "dockerfile", "lua" },
   highlight = { enable = true },
 }
-vim.g.mapleader = " "
-local keymap = vim.keymap.set
 
--- Поиск через Telescope
+-- Горячие клавиши
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { desc = "Поиск файлов" })
 keymap("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", { desc = "Поиск по содержимому" })
+keymap("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Файловый менеджер" })
+keymap("n", "<leader>kk", "<cmd>AlphaKeymap<CR>", { desc = "Горячие клавиши" })
+function OpenLazyGit()
+  -- откроет терминал в новой вкладке и закроет после выхода
+  vim.cmd("tabnew")
+  vim.fn.termopen("lazygit", {
+    on_exit = function()
+      vim.cmd("bd!")  -- закроет буфер без лишнего вывода
+    end,
+  })
+  vim.cmd("startinsert")
+end
 
--- Git через Neogit
-keymap("n", "<leader>gg", "<cmd>Neogit<CR>", { desc = "Git GUI (neogit)" })
+vim.keymap.set("n", "<leader>gg", OpenLazyGit, { desc = "LazyGit" })
+
+
+-- Команда :AlphaKeymap
+vim.api.nvim_create_user_command("AlphaKeymap", function()
+  vim.notify([[
+󰣇  Горячие клавиши:
+SPC ff  – Поиск файла
+SPC fg  – Поиск слова
+SPC ee  – Файловый менеджер (NvimTree)
+SPC gg  – LazyGit
+SPC /   – Поиск в буфере
+SPC q   – Закрыть Neovim
+  ]], vim.log.levels.INFO, { title = "Keybindings" })
+end, {})
 
