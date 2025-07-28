@@ -115,8 +115,9 @@ vim.api.nvim_create_user_command("AlphaKeymap", function()
   vim.notify([[
 󰣇  Горячие клавиши:
 SPC ff  – Поиск файла
-SPC fg  – Поиск слова
 SPC ee  – Файловый менеджер (NvimTree)
+CTRL w h– Перейти в левое окно
+CTRL w h– Перейти в правое окно
 SPC gg  – LazyGit
 SPC /   – Поиск в буфере
 SPC q   – Закрыть Neovim
