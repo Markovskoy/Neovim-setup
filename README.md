@@ -51,7 +51,8 @@ bash setup.sh
 | История коммитов | `:Telescope git_commits`    |
 | Diff             | `:Gitsigns preview_hunk`    |
 | Кто правил строку | `:Gitsigns blame_line`     |
-
+| pull              | `p`                        |
+| Push              | `P`                        |
 ---
 
 ## 🖼 Цветовые схемы (темы)
