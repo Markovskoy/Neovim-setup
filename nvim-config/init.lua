@@ -48,8 +48,8 @@ require("lazy").setup({
       dashboard.section.buttons.val = {
         dashboard.button("e", "  New File", ":ene <BAR> startinsert<CR>"),
         dashboard.button("SPC ee", "  Toggle file explorer", ":NvimTreeToggle<CR>"),
-        dashboard.button("SPC ff", "  Find File", ":Telescope find_files<CR>"),
         dashboard.button("SPC gg", "  LazyGit", ":LazyGit<CR>"),
+        dashboard.button("SPC kk", " HotKeyHelp",":AlphaKeymap<CR>"),
         dashboard.button("q", "  Quit NVIM", ":qa<CR>"),
       }
     -- Send config to alpha
