@@ -1,3 +1,5 @@
+-- init.lua
+
 vim.g.mapleader = " "
 local keymap = vim.keymap.set
 
@@ -30,38 +32,58 @@ require("lazy").setup({
     dependencies = { "nvim-lua/plenary.nvim" },
   },
 
-  {
-    "goolord/alpha-nvim",
+  -- Экран приветствия
+
+{
+  "goolord/alpha-nvim",
+  dependencies = { "nvim-tree/nvim-web-devicons" },
   event = "VimEnter",
   config = function()
     local alpha = require("alpha")
     local dashboard = require("alpha.themes.dashboard")
-      
-    dashboard.section.header.val = {
-        [[███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗]],
-        [[████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║]],
-        [[██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║]],
-        [[██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║]],
-        [[██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║]],
-        [[╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
-      }
-      dashboard.section.buttons.val = {
-        dashboard.button("e", "  New File", ":ene <BAR> startinsert<CR>"),
-        dashboard.button("SPC ee", "  Toggle file explorer", ":NvimTreeToggle<CR>"),
-        dashboard.button("SPC gg", "  LazyGit", ":LazyGit<CR>"),
-        dashboard.button("SPC kk", " HotKeyHelp",":AlphaKeymap<CR>"),
-        dashboard.button("q", "  Quit NVIM", ":qa<CR>"),
-      }
-    -- Send config to alpha
-    alpha.setup(dashboard.opts)
 
-    -- Disable folding on alpha buffer
+    dashboard.section.header.val = {
+      [[███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗]],
+      [[████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║]],
+      [[██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║]],
+      [[██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║]],
+      [[██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║]],
+      [[╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+    }
+
+      dashboard.section.buttons.val = {
+        dashboard.button("e",      "📄  New File",         ":ene <BAR> startinsert<CR>"),
+        dashboard.button("SPC ee", "📁  File Explorer",    ":NvimTreeToggle<CR>"),
+        dashboard.button("SPC gg", "🔧  LazyGit",          ":LazyGit<CR>"),
+        dashboard.button("SPC kk", "💡  HotKeyHelp",       ":AlphaKeymap<CR>"),
+        dashboard.button("q",      "❌  Quit NVIM",        ":qa<CR>"),
+      }
+
+    -- 📐 Вычисляем точное центрирование
+    local function dynamic_padding()
+      local header_lines = #dashboard.section.header.val
+      local button_lines = #dashboard.section.buttons.val
+      local total_lines = header_lines + button_lines + 3  -- +паддинги между ними
+      local win_height = vim.fn.winheight(0)
+      local pad_top = math.floor((win_height - total_lines) / 2)
+      return { type = "padding", val = pad_top }
+    end
+
+    dashboard.config.layout = {
+      dynamic_padding(),
+      dashboard.section.header,
+      { type = "padding", val = 2 },
+      dashboard.section.buttons,
+      { type = "padding", val = 1 },
+    }
+
+    alpha.setup(dashboard.config)
     vim.cmd([[autocmd FileType alpha setlocal nofoldenable]])
   end,
 },
 })
 
--- Общие настройки
+  -- Общие настройки
 vim.o.number = true
 vim.o.relativenumber = false
 vim.o.termguicolors = true
@@ -93,34 +115,30 @@ require("nvim-treesitter.configs").setup {
 
 -- Горячие клавиши
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { desc = "Поиск файлов" })
-keymap("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", { desc = "Поиск по содержимому" })
 keymap("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Файловый менеджер" })
 keymap("n", "<leader>kk", "<cmd>AlphaKeymap<CR>", { desc = "Горячие клавиши" })
+
 function OpenLazyGit()
-  -- откроет терминал в новой вкладке и закроет после выхода
   vim.cmd("tabnew")
   vim.fn.termopen("lazygit", {
     on_exit = function()
-      vim.cmd("bd!")  -- закроет буфер без лишнего вывода
+      vim.cmd("bd!")
     end,
   })
   vim.cmd("startinsert")
 end
-
-vim.keymap.set("n", "<leader>gg", OpenLazyGit, { desc = "LazyGit" })
-
+keymap("n", "<leader>gg", OpenLazyGit, { desc = "LazyGit" })
 
 -- Команда :AlphaKeymap
 vim.api.nvim_create_user_command("AlphaKeymap", function()
-  vim.notify([[
-󰣇  Горячие клавиши:
-SPC ff  – Поиск файла
-SPC ee  – Файловый менеджер (NvimTree)
-|  CTRL w h  – Перейти в левое окно
-|  CTRL w h  – Перейти в правое окно
-SPC gg  – LazyGit
-SPC /   – Поиск в буфере
-SPC q   – Закрыть Neovim
-  ]], vim.log.levels.INFO, { title = "Keybindings" })
+  vim.notify([[  
+💡  Горячие клавиши:
+  SPC ff   – Поиск файла
+  SPC ee   – Файловый менеджер (NvimTree)
+  | Ctrl-w h – Перейти влево
+  | Ctrl-w l – Перейти вправо
+  SPC gg   – LazyGit
+  SPC q    – Закрыть Neovim
+]], vim.log.levels.INFO, { title = "⌨️ Keybindings" })
 end, {})
 
