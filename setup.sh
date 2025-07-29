@@ -36,8 +36,7 @@ mkdir -p ~/.config/nvim/lazy
 cp "$HOME/Neovim-setup/nvim-config/init.lua" ~/.config/nvim/init.lua
 cp -r "$HOME/Neovim-setup/nvim-config/lazy/lazy.nvim" ~/.config/nvim/lazy/lazy.nvim
 
-source ~/.bashrc
-echo ""
-which nvim
 
-echo "✅ Установка завершена. Запусти nvim, обнови плагины."
+echo "✅ Установка завершена. Запусти nvim, обнови плагины 'U'."
+
+source ~/.bashrc
