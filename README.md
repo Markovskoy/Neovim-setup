@@ -1,6 +1,6 @@
 # Neovim Setup (только для локального пользователя)
 
-![0729 (1)](https://github.com/user-attachments/assets/334fd983-0cfc-47b1-8ae2-8cbbf40791fd)![0729-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/370a9805-2087-463e-a172-3a33f7e4c225)
+![0729 (1)](https://github.com/user-attachments/assets/334fd983-0cfc-47b1-8ae2-8cbbf40791fd) ![output](https://github.com/user-attachments/assets/d527d3ed-fe1c-47b6-9540-9d5c9535ef27)
 
 
 Назначение: "Конфигурация предназначена только для текущего пользователя, не влияет на глобальную систему".
