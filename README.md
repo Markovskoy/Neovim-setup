@@ -14,11 +14,9 @@
 
 ## 🛠 Как запустить
 
-```git
-https://github.com/Markovskoy/Neovim-setup.git
 ```
-
-```bash
+git clone https://github.com/Markovskoy/Neovim-setup.git
+cd ./Neovim-setup/
 bash setup.sh
 ```
 

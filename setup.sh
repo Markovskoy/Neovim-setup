@@ -5,19 +5,28 @@ set -e
 echo "🔧 Установка Neovim 0.11 в ~/.local/bin"
 mkdir -p ~/.local/bin
 cd ~/.local/bin
-curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
-chmod u+x nvim.appimage
-./nvim.appimage --appimage-extract > /dev/null
+curl -LO https://github.com/neovim/neovim/releases/download/v0.11.3/nvim-linux-arm64.appimage
+chmod u+x nvim-linux-arm64.appimage
+./nvim-linux-arm64.appimage --appimage-extract > /dev/null
 ln -sf ~/.local/bin/squashfs-root/AppRun ~/.local/bin/nvim
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 
+echo ""
+echo "🔍 Проверка наличия C-компилятора..."
+if ! command -v gcc &> /dev/null; then
+  echo "🚫 gcc не найден. Устанавливаем build-essential..."
+  sudo apt update
+  sudo apt install -y build-essential
+else
+  echo "✅ gcc уже установлен."
+fi
 
 echo "📦 Установка LazyGit..."
 cd /tmp
 curl -L -o lazygit.tar.gz https://github.com/jesseduffield/lazygit/releases/download/v0.53.0/lazygit_0.53.0_Linux_x86_64.tar.gz
 tar xf lazygit.tar.gz lazygit
 sudo install lazygit /usr/local/bin
-rm -f lazygit.tar.gz lazygit
+rm -f lazygit*
 echo "✅ LazyGit установлен. Версия:"
 lazygit --version
 
@@ -27,4 +36,8 @@ mkdir -p ~/.config/nvim/lazy
 cp ./nvim-config/init.lua ~/.config/nvim/init.lua
 cp -r ./nvim-config/lazy/lazy.nvim ~/.config/nvim/lazy/lazy.nvim
 
-echo "✅ Установка завершена. Запусти nvim"
+source ~/.bashrc
+echo ""
+which nvim
+
+echo "✅ Установка завершена. Запусти nvim, обнови плагины."
