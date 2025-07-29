@@ -5,9 +5,9 @@ set -e
 echo "🔧 Установка Neovim 0.11 в ~/.local/bin"
 mkdir -p ~/.local/bin
 cd ~/.local/bin
-curl -LO https://github.com/neovim/neovim/releases/download/v0.11.3/nvim-linux-arm64.appimage
-chmod u+x nvim-linux-arm64.appimage
-./nvim-linux-arm64.appimage --appimage-extract > /dev/null
+curl -LO https://github.com/neovim/neovim/releases/download/v0.11.3/nvim-linux-x86_64.appimage
+chmod u+x nvim-linux-x86_64.appimage
+./nvim-linux-x86_64.appimage --appimage-extract > /dev/null
 ln -sf ~/.local/bin/squashfs-root/AppRun ~/.local/bin/nvim
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 
@@ -23,8 +23,8 @@ fi
 
 echo "📦 Установка LazyGit..."
 cd /tmp
-curl -L -o lazygit.tar.gz https://github.com/jesseduffield/lazygit/releases/download/v0.53.0/lazygit_0.53.0_Linux_x86_64.tar.gz
-tar xf lazygit.tar.gz lazygit
+curl -LO https://github.com/jesseduffield/lazygit/releases/download/v0.53.0/lazygit_0.53.0_Linux_x86_64.tar.gz
+tar -xf lazygit_0.53.0_Linux_x86_64.tar.gz lazygit
 sudo install lazygit /usr/local/bin
 rm -f lazygit*
 echo "✅ LazyGit установлен. Версия:"
