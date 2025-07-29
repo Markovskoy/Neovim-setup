@@ -3,7 +3,7 @@
 ## 🔧 Что делает этот setup.sh
 Скрипт устанавливает Neovim 0.11 и настраивает:
 - 🧠 подсветку синтаксиса (Treesitter)
-- 🧬 Git-интеграцию (Gitsigns + Neogit)
+- 🧬 Git-интеграцию (Lazygit)
 - 📁 файловый менеджер (NvimTree)
 - 🔍 мощный поиск (Telescope)
 - 🌈 цветовую тему (tokyonight)
