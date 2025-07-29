@@ -33,8 +33,8 @@ lazygit --version
 
 echo "📁 Копируем конфиг Neovim из локальной папки"
 mkdir -p ~/.config/nvim/lazy
-cp ./nvim-config/init.lua ~/.config/nvim/init.lua
-cp -r ./nvim-config/lazy/lazy.nvim ~/.config/nvim/lazy/lazy.nvim
+cp "$HOME/Neovim-setup/nvim-config/init.lua" ~/.config/nvim/init.lua
+cp -r "$HOME/Neovim-setup/nvim-config/lazy/lazy.nvim" ~/.config/nvim/lazy/lazy.nvim
 
 source ~/.bashrc
 echo ""
